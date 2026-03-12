@@ -8,26 +8,26 @@
 ## 2. Key Features
 
 * **Pay billers** via Visa, Mastercard, or Amex debit and credit cards only. Australian-issued cards only; no international cards or bank transfers.
-* **Service fee** varies by card type (see [Pricing](https://prospa.atlassian.net/wiki/spaces/PRODUCT/pages/4542464012/Pay+By+Card+Spec+Doc+FAQs#5.-Pricing-%26-Fees)).
+* **Service fee** varies by card type (see [Pricing & Fees](https://prospa.atlassian.net/wiki/spaces/PRODUCT/pages/4542464012/Pay+By+Card+Spec+Doc+FAQs#5.-Pricing-%26-Fees) below).
 * **Optional Rewards:** When rewards are enabled, customers earn 1 Reward Point per $1 of eligible transaction value and pay an additional **reward fee** (1% + GST). They also keep their card's own reward points ("double dip").
 * Fee calculation is shown before the customer confirms the payment.
-* Payment requests are processed via the Live Payments partner; status updates (e.g. Completed, Failed, Pending) are received via webhooks and reflected in the platform.
+* Payment requests are processed via the Live Payments partner and take around 2 business days to settle; the status updates (e.g. Processing, Declined, Paid) are received via webhooks and reflected in the platform.
 
 ## 3. How It Works (Step-by-Step)
 
 1. **Onboarding:** Customer completes Pay By Card onboarding (payer creation with the partner). Once approved, they can add payment methods and billers.
-2. **Add payment method:** Customer adds a Visa, Mastercard, or Amex card (Australian-issued debit or credit only; no international cards). Card verification may be required.
-3. **Add biller (payee):** Customer adds a biller (e.g. ATO, supplier) with required details (e.g. BSB, account number, account name, reference). The biller may need to be verified (Approved / Rejected / Unverified).
-4. **Create payment:** Customer enters amount, selects payment method and biller, and (if applicable) opts in to rewards. The system calculates and displays service fee and, when selected, reward fee (and GST). Total charge = bill amount + fees.
-5. **Submit:** Customer submits the payment. The platform creates a payment request with the partner. The customer is charged the total amount (bill + fees) to their card.
+2. **Add payment method:** Customer adds a Visa, Mastercard, or Amex card (Australian-issued debit or credit only; no international cards). Card verification is required and consists of placing two temporary transactions on the customer's account linked to the card. The customer must enter these amounts during the in-app verification flow.
+3. **Add biller (payee):** Customer adds a biller (e.g. ATO, supplier) with required details (ABN, industry, BSB, account number, account name, description, and reference). BPAY billers become available in May.
+4. **Create payment:** The customer enters the amount, selects the payment method and biller, and opts into rewards if applicable. The system calculates and displays the Platform fee, which includes the service fee and, if selected, the reward fee plus GST. The total charge equals the bill amount plus fees and GST.
+5. **Submit:** Customer submits the payment. The platform creates a payment request with the partner. The customer is charged the total amount (bill + fees + GST) to their card.
 6. **Settlement:** The partner processes the transfer to the biller. Status updates (e.g. Completed, Failed, Pending) are received via webhooks and stored. Points (if rewards were enabled) accrue on successful settlement per Rewards rules.
 
 ## 4. Eligibility & Requirements
 
 * Customer must have an active Prospa relationship and complete Pay By Card onboarding.
 * Valid Australian-issued Visa, Mastercard, or Amex debit or credit card (no international cards or bank transfers).
-* Biller details (BSB, account number, account name, reference) must be provided; some billers require verification (e.g. industry code). Invalid or missing industry code can prevent adding a biller.
-* Rewards (Reward Points) are subject to Rewards program eligibility (e.g. active Prospa Account, rewards enabled). **Excluded industries:** Payments to billers in certain industries (by MCC) are not permitted in our digital channels. Customers cannot submit a payment to those billers in the app or web app (hard stop).
+* Biller details (ABN, Industry, BSB, account number, account name, description and reference) must be provided; billers are verified on the spot. Billers with an inactive ABN or part of the **excluded industries** will prevent adding a biller.
+* Rewards (Reward Points) are subject to Rewards program eligibility (e.g. active Prospa Account, rewards enabled).
 
 ## 5. Pricing & Fees
 
@@ -52,7 +52,7 @@ _Source:_ [_Competitor fees & Our goto market pricing_](https://prospa.atlassian
 ## 7. Process / Transaction Flow
 
 * **Create payment:** Customer submits amount, payee (biller), payment method, and optional rewards. API calculates fees (service + optional reward), creates payment request with partner, stores payment request and fee breakdown (service fee, reward fee, GST, total charged).
-* **Status flow:** Payment request status is **Pending** → **Completed** or **Failed**. Status updates are received via webhooks from the partner (e.g. payment result, transaction transfer status, refunds). Transaction types: Payment, Refund, Reversal, Sale.
+* **Status flow:** Payment request status is **Processing** → **Paid** or **Declined**. Status updates are received via webhooks from the partner (e.g. payment result, transaction transfer status, refunds). Transaction types: Payment, Refund, Reversal, Sale.
 * **Refunds:** Refund webhooks are processed; refunded amounts and any fee/points adjustments are handled per business rules (see Rewards spec for points reversal).
 
 ## 8. Edge Cases & Exceptions
@@ -70,23 +70,21 @@ _Source:_ [_Competitor fees & Our goto market pricing_](https://prospa.atlassian
     * Ask the question applicable to the customer issue.
     * Example, show me the last Pay By Card transaction for X (email) that declined and the reason why?
 
-* Please use #sme-apps-support to escalate any questions or issues.
+* Collect as much info as possible from the customer (transaction amount, biller, date of payments etc) before escalating to #sme-apps-support
 
 | Issue | What to do |
 | --- | --- |
-| "I was charged but the biller didn't get the money." | Ask customer look up the payment and transaction status.  If status is Paid, confirm with the customer that the transfer was sent and to check with their biller. If issue persist, escalate to #sme-apps-support If Processing, explain that it takes 2 business days.  If Declined, explain no transfer was made and that refunds (if any) follow the usual process. |
-| "My payment failed." | Advise checking card, limits, and retrying or using another card. Confirm no fee is charged on failed payments. Escalate to #sme-apps-support if necessary. |
-| "I don't see the reward fee / points." | Ask customer look up the payment and transaction status. If they did, reward fee appears on the individual transaction level. Points accrue on settlement (See above). Escalate to #sme-apps-support if necessary. |
-| "Wrong amount / duplicate charge." | Escalate to #sme-apps-support if necessary. |
-| "Biller won't add / verification failed." | Ask Customer to check that all required fields (ABN, Industry, BSB, account number, account name, reference, industry code where required) are correct.  In-app error message should have enough detail to understand next steps. |
+| "I was charged but the biller didn't get the money." | Ask customer to look up the payment and transaction status. If status is Paid, confirm with the customer that the transfer was sent and to check with their biller. If issue persists, escalate to #sme-apps-support. If Processing, explain that it takes 2 business days from the day the payment was lodged. If Declined, explain no transfer was made and that funds will be returned to their account within 2 business days. |
+| "My payment was declined." | Advise checking card funds, limits, and retrying or using another card. Confirm no fee is charged on failed payments and funds will be returned to customer's account within 2 business days. Escalate to #sme-apps-support if necessary. |
+| "I don't see the reward fee / points." | Ask customer to look up the payment and transaction status as points accrue on settlement. If transaction status = Paid, reward fee appears on the individual transaction level. Points accrue on settlement (See above). Escalate to #sme-apps-support if transaction status = Paid but no funds show up. |
+| "Wrong amount / duplicate charge." | Escalate to #sme-apps-support. |
+| "Biller won't add / verification failed." | Ask the customer to share the in-app error message with sufficient detail to determine the next steps. Also, check that all required fields (ABN, Industry, BSB, account number, account name, description and reference) are correct. |
 
 ## 10. Known Limitations / Constraints
 
-* Service and reward fee rates are set per environment and may differ from the go-to-market table in specific configurations; the in-app fee at time of payment is the binding amount.
-* Pay By Card is only available for customers who have completed onboarding with the partner and have an active payer status.
+* Pay By Card is only available for Australian customers who have completed onboarding with the partner and have an active payer status.
 * Only Australian-issued Visa, Mastercard, and Amex debit or credit cards are accepted; no international cards or bank transfers.
-* Not all billers or transaction types may be eligible for rewards. Payments to excluded industries (MCC) are blocked in app and web app; see [Excluded industries (MCC)](#excluded-industries-mcc) above and Rewards spec.
-* Refunds and reversals may affect points (see Rewards spec).
+* Not all billers or transaction types may be eligible for rewards. Payments to **excluded industries (MCC)** are blocked in app and web app.
 
 ---
 
@@ -95,65 +93,65 @@ _Source:_ [_Competitor fees & Our goto market pricing_](https://prospa.atlassian
 ## 1. Basics
 
 1. **What is Pay By Card?**
-   Pay By Card lets you pay billers (e.g. ATO, suppliers) with your Visa, Mastercard, or Amex card. You're charged a service fee—and a reward fee if you earn Reward Points.
+   Pay By Card lets you pay **billers** (e.g. **ATO**, **suppliers**) with your **Visa**, **Mastercard**, or **Amex** card. You're charged a **service fee** — and a **reward fee** if you earn **Reward Points**.
 2. **Which cards can I use?**
-   Visa, Mastercard, or Amex debit or credit cards (Australian‑issued only). No international cards or bank transfers. Fees depend on card type.
+   **Visa**, **Mastercard**, or **Amex** **debit** or **credit cards** (**Australian‑issued only**). No **international cards** or **bank transfers**. **Fees** depend on **card type**.
 3. **Does Pay By Card work with my Prospa loan?**
-   Pay By Card is separate. You need to complete Pay By Card onboarding and have an active account to use it. Loan eligibility is separate.
+   Pay By Card is **separate**. You need to complete **Pay By Card onboarding** and have an **active account** to use it. **Loan eligibility** is separate.
+4. **Do I have to have a Prospa Loan or Line of Credit to access Pay By Card?**
+   No. Pay By Card is a stand-alone product and can be used without any Prospa credit product.
 
 ## 2. Fees & charges
 
-4. **What are the fees?**
-   Our **Platform fee** consists of the **Service fee**: Visa and Mastercard 1.2%, Amex 2.1% (ex GST), and the **Reward Fee**—an additional 1% (+ GST) if the customer opts to earn Reward points.
-5. **When am I charged?**
-   We charge the full amount (bill + fees + GST) when you submit. You'll see the breakdown before you confirm.
-6. **Why is Amex more expensive?**
-   Amex costs are typically higher, so the service fee is 2.1% (ex GST).
-7. **Are fees tax‑deductible?**
-   Depending on your circumstances our **Platform fee** might be tax deductible. This is not financial advice, please consult an accountant.
+5. **What are the fees?**
+   Our **Platform fee** consists of the **Service fee**: **Visa and Mastercard 1.2%**, **Amex 2.1%** (**ex GST**), and the **Reward fee** — an additional **1% (+ GST)** if the customer opts to earn **Reward Points**.
+6. **When am I charged?**
+   We charge the **full amount** (**bill + fees + GST**) when you **submit**. You'll see the **breakdown** before you **confirm**.
+7. **Why is Amex more expensive?**
+   **Amex processing fees** are typically higher, so the **service fee** is at a competitive market rate of **2.1% (ex GST)**.
+8. **Are fees tax‑deductible?**
+   Depending on your circumstances our **Platform fee** might be **tax deductible**. This is **not financial advice**; please **consult an accountant**.
 
 ## 3. Rewards
 
-8. **Do I earn Reward Points?**
-   Only when you turn rewards on for that payment. You earn 1 point per $1 of eligible spend and keep your card points. Reward fee: 1% + GST.
-9. **Why don't I see the reward fee?**
-   The reward fee only applies when you opt in for that payment. No opt‑in = service fee only, no Reward Points.
+9. **Do I earn Reward Points?**
+   Only when you **turn rewards on** for that payment. You earn **1 point per $1 of eligible spend** and keep your **card points**. **Reward fee:** **1% + GST**.
 
 ## 4. Payments & limits
 
 10. **Is there a minimum or maximum payment?**
-    No minimum or maximum payment amount; only your card limits apply. Fees are calculated on the payment amount.
+    No **minimum** or **maximum payment amount**; only your **card limits** apply.
 11. **Can I pay the ATO?**
-    Yes, if ATO is available in your region and you've added it with the correct details. You'll see the fee before you confirm.
+    Yes. You can pay your BAS and other ATO‑related payments using Pay By Card, while earning Reward Points (if Prospa Rewards is turned on).
 12. **What statuses can a payment have?**
-    Pending (processing), Completed (transfer sent), or Failed. Refunds may show as separate transactions.
-13. **Where is my receipt or confirmation?**
-    In the app or portal—use transaction history for your records.
+    **Processing**, **Paid**, or **Declined**.
+13. **Where can I find confirmation of my payment?**
+    In the **app** or **portal** — use **transaction history** for your records.
 
 ## 5. Payment problems
 
-14. **Why did my payment fail?**
-    The card or issuer may have declined (e.g. limit or fraud check). No fee is charged. Try another card or contact your card issuer.
+14. **Why did my payment get declined?**
+    Our payments partner LivePayments might decline payments if it suspects misuse of the platform.
 15. **The biller didn't receive the payment.**
-    Check the status in the app.
+    Check the **status** in the **app**.
 
-    * **Completed** = we've sent the transfer (allow time for the bank).
-    * **Pending** = we're still processing.
-    * **Failed** = no transfer went through.
+    * **Processing** = we're still **processing**.
+    * **Paid** = we've sent the **transfer** (allow time for the **bank**).
+    * **Declined** = no **transfer** went through.
 
 16. **I was charged twice.**
-    Contact support with the payment reference(s). We'll check for duplicates and follow the refund/reversal process if needed.
+    Contact **support** with the **payment reference(s)**. We'll check for **duplicates** and follow the **refund/reversal process** if needed.
 17. **Can I get a refund?**
-    We handle refunds under our and the partner's terms. Send us the payment details and we'll look it up and explain. Reward Points earned may be reversed (see Rewards FAQs).
+    No refunds.
 
 ## 6. Billers & setup
 
 18. **Why can't I add my biller?**
-    Enter BSB, account number, account name and reference correctly. Some billers need verification (e.g. industry code). If it fails, fix the details and try again.
+    Enter **ABN**, **Industry**, **BSB**, **account number**, **account name** and **reference** correctly. Biller might be rejected if ABN is inactive or biller is on excluded industry list.
 19. **What if my card expired or was replaced?**
-    Update or add a new payment method in Pay By Card settings. Old cards can cause payments to fail.
+    **Update** or **add a new payment method** in **Pay By Card settings**. **Old cards** can cause payments to **fail**.
 
 ## 7. Support
 
 20. **Who do I contact for payment or fee errors?**
-    Contact Prospa support with your payment reference. We'll look it up and guide you through next steps.
+    Contact **Prospa support** with your **payment details**. We'll look it up and **guide you** through **next steps**.
