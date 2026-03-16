@@ -1,9 +1,9 @@
-# Rewards – Spec Sheet & FAQs
+# Rewards – Spec Doc
 
 ## 1. Product Overview
 
 * Prospa Rewards (the "Rewards program") lets customers with a Prospa Account earn **Reward Points** on eligible activity (e.g. eligible payments when rewards are enabled).
-* The first product to earn points at launch is **[Pay By Card](https://prospa.atlassian.net/wiki/x/DIDADgE)**, awarding **1 Reward Point per full $1 of eligible transaction value.**
+* The first product to earn points at launch is [**Pay By Card**](https://prospa.atlassian.net/wiki/x/DIDADgE), awarding **1 Reward Point per full $1 of eligible transaction value.**
 * In-app toggle during Pay By Card payment lets customers opt in to earn points per transaction.
 * Points can be redeemed for **Qantas Points** (via Qantas Business Rewards [QBR]) at a rate of **2 Reward Points = 1 Qantas Point**.
 * Additional redemption options (e.g. gift cards) may be offered in future.
@@ -20,12 +20,14 @@
 ## 3. How It Works (Step-by-Step)
 
 **Earning**
+
 1. Customer has an active Prospa Account and (where required) opts in to rewards for the product (e.g. Pay By Card).
 2. Customer completes eligible activity (e.g. makes an eligible payment with rewards enabled). The reward fee (e.g. 1% + GST) is charged at the time of the transaction.
 3. Points accrue on **successful settlement** of the transaction, not on authorisation. They may show as pending until settlement and any verification period.
 4. Earn rate: 1 Reward Point per full $1 of eligible transaction value (rounded down; GST and taxes excluded). Excluded transaction types and MCC list apply as defined by Prospa.
 
 **Redemption to Qantas**
+
 1. Customer must have at least **2,000 Reward Points** and an eligible QBR membership (or join QBR where offered through Prospa).
 2. Customer chooses to redeem in increments of 2 Reward Points. Conversion: **2 Reward Points = 1 Qantas Point**.
 3. On successful redemption, Prospa converts the Reward Points to Qantas Points and transfers them to QBR. **The points appear in the customer's QBR account instantly** after successful conversion.
@@ -53,9 +55,12 @@
 ## 7. Process / Transaction Flow
 
 * **Earning:** Transaction with rewards enabled → settlement → points calculated (1 pt per $1, rounded down, ex GST) → points recorded (may be pending) → after any verification/reconciliation period, points become available. Refund/chargeback → points reversed or adjusted.
-  * See [Pay By Card & Earn UX](https://www.figma.com/design/z1AjqVqYuqdVSuuf2pGhZ6/Pay---Rewards?node-id=872-16967&t=UucTEyTYhOqfGXBb-4)
+
+    * See [Pay By Card & Earn UX](https://www.figma.com/design/z1AjqVqYuqdVSuuf2pGhZ6/Pay---Rewards?node-id=872-16967&t=UucTEyTYhOqfGXBb-4)
+
 * **Redemption:** Customer has ≥2,000 points and (for Qantas) eligible QBR → selects amount in increments of 2 Reward Points → submits redemption → Prospa converts (2:1) and transfers to QBR → **Qantas Points appear in QBR account instantly** on success. Prospa's responsibility ends on successful transfer. For membership issues, contact Qantas directly at 13 74 78.
-  * See [Qantas Redemption UX](https://www.figma.com/design/z1AjqVqYuqdVSuuf2pGhZ6/Pay---Rewards?node-id=103-32983&t=UucTEyTYhOqfGXBb-4)
+
+    * See [Qantas Redemption UX](https://www.figma.com/design/z1AjqVqYuqdVSuuf2pGhZ6/Pay---Rewards?node-id=103-32983&t=UucTEyTYhOqfGXBb-4)
 
 ## 8. Edge Cases & Exceptions
 
@@ -68,7 +73,13 @@
 
 ## 9. Common Issues + Agent Response Steps
 
-Please use #sme-apps-support to escalate any questions or issues.
+* Use Posthog AI Chat to get a view of the customers activity.
+
+    * Navigate to [Posthog AI](https://us.posthog.com/project/254419/ai) and start a new chat
+    * Ask the question applicable to the customer issue.
+    * Example, show me the last Pay By Card transaction for X (email) that declined and the reason why?
+
+* Please use #sme-apps-support to escalate any questions or issues.
 
 | Issue | What to do |
 | --- | --- |
@@ -92,77 +103,72 @@ Please use #sme-apps-support to escalate any questions or issues.
 
 # Rewards – FAQs
 
-1. **What are Reward Points?**  
+## 1. Program basics
+
+1. **What are Reward Points?**
    Points you earn on eligible activity (e.g. payments when rewards are on). Redeem for Qantas Points (2 Reward Points = 1 Qantas Point) or other options we offer.
-
-2. **How do I earn Reward Points?**  
-   When rewards are on for an eligible product (e.g. Pay By Card), you earn 1 Reward Point per $1 of eligible spend (rounded down). A 1% reward fee + GST applies when you opt in for that payment.
-
-3. **What is the reward fee?**  
-   When you opt in on a payment, we charge 1% reward fee (+ GST) on that transaction. We'll show you the fee and points before you confirm.
-
-4. **Do I earn points on every payment?**  
-   No. Only eligible transactions with rewards on earn points. The first product at launch is [**Pay By Card**](https://prospa.atlassian.net/wiki/x/DIDADgE)—1 Reward Point per full $1 of eligible value. Some types or merchants are excluded (see Pay By Card spec). Amount rounded down; GST excluded.
-
-5. **When do my points show up?**  
-   When the transaction **settles**, not when you authorise. They may show as pending briefly. For Qantas, once redemption succeeds, Qantas Points appear in your QBR account straight away.
-
-6. **What is the minimum to redeem?**  
-   You need at least **2,000 Reward Points** to redeem. You redeem in **increments of 2 Reward Points** (2 Reward Points = 1 Qantas Point).
-
-7. **How do I redeem for Qantas Points?**  
-   You need a Qantas Business Rewards (QBR) membership—join free through our app or portal if you're not a member. Choose how many points to convert; 2 Reward Points = 1 Qantas Point. After a successful redemption, Qantas Points land in your QBR account straight away.
-
-8. **I redeemed but don't see Qantas Points.**  
-   If redemption completed in our system, points are sent to Qantas straight away and should show in your QBR account. Check your QBR balance; for QBR or Qantas issues, contact Qantas on 13 74 78.
-
-9. **Do points expire?**  
+2. **What can I use Prospa Reward Points for?**
+   You can convert your Reward Points to Qantas Points. Qantas Points earned by your business are stored in your Qantas Business Rewards (QBR) account. These can be transferred to any Qantas Frequent Flyer account to use on flights for business, upgrades, hotels, car hire, wine or choose from over 30,000 products from Qantas Marketplace.
+3. **Do points expire?**
    Yes. After **18 months of inactivity** (no new points earned), they expire. We can't reinstate them. We may also forfeit points if your account closes or terms are breached.
+4. **Can I get cash for my points?**
+   No. Points cannot be exchanged for cash. They can be redeemed for Qantas Points (or other options when available).
+5. **Can I transfer points to someone else?**
+   No. Points are non-transferable and linked to your Prospa Account (and ABN).
+6. **What happens to my points if I close my Prospa account?**
+   All unused points are forfeited. We don't pay out or replace them.
 
-10. **Can I get cash for my points?**  
-    No. Redeem for Qantas Points (or other options we offer).
+## 2. Earning points
 
-11. **Why were my points reversed?**  
-    Refund, chargeback, or ineligible transaction—we may also adjust for errors or misuse. We don't compensate for reversed or forfeited points.
-
-12. **Is there a fee to redeem?**  
-    No. We don't charge to redeem. Partners may have their own fees or conditions.
-
-13. **Can I transfer points to someone else?**  
-    No. Points are non-transferable and linked to your Prospa Account (and ABN).
-
-14. **Why didn't I earn points on my Pay By Card payment?**  
-    Only if you had rewards on for that payment. No opt-in = service fee only, no Reward Points.
-
-15. **What if I have a refund on a payment I earned points on?**  
-    We may reverse or reduce the points. The reward fee isn't refunded for the points portion unless our terms say otherwise.
-
-16. **Do I need a Qantas account to earn Reward Points?**  
-    No. You only need Qantas Business Rewards (QBR) to **redeem** for Qantas Points.
-
-17. **How do I join Qantas Business Rewards?**  
-    Join through the Prospa redemption flow when we offer it (e.g. free with Prospa). Your ABN is your QBR membership number. Qantas' terms apply once you're a member.
-
-18. **What's the conversion rate?**  
-   **2 Reward Points = 1 Qantas Point.** So 2,000 Reward Points = 1,000 Qantas Points. Redeem in whole increments of 2.
-
-19. **Are there blackout dates or limits on Qantas?**  
-    Qantas' terms apply (availability, blackout dates). Once points are transferred, we're not responsible for Qantas' rules or availability.
-
-20. **Who do I contact for points or redemption issues?**  
-    Missing or incorrect points, or redemption not completing: contact Prospa support. For Qantas Points already in your QBR account: contact Qantas.
-
-21. **What happens to my points if I close my Prospa account?**  
-    All unused points are forfeited. We don't pay out or replace them.
-
-22. **Can I earn points on bank transfers?**  
-    Pay By Card is card-only (Visa, Mastercard, Amex debit or credit—no bank transfers), so this doesn't apply to Pay By Card. If we add other products that support bank transfer in future, we'll update the program rules.
-
-23. **Why is my balance "pending"?**  
-    Points may be pending until the transaction settles and we've finished verification. Then they're available. For Qantas, points land in your QBR account straight away after a successful conversion.
-
-24. **Are there bonus or promotional points?**  
+7. **How do I earn Reward Points?**
+   When rewards are on for an eligible product (e.g. Pay By Card), you earn **1 Reward Point per $1 of eligible spend** (rounded down). A 1% reward fee + GST applies when you opt in for that payment.
+8. **What is the reward fee?**
+   When you opt in on a payment, we charge a **1% reward fee (+ GST)** on that transaction. We'll show you the fee and points before you confirm.
+9. **Do I earn points on every payment?**
+   No. Only eligible transactions with rewards on earn points. The first product at launch is [**Pay By Card**](https://prospa.atlassian.net/wiki/x/DIDADgE)—1 Reward Point per full $1 of eligible value. Some types or merchants are excluded (see Pay By Card spec). Amount rounded down; GST excluded.
+10. **Why didn't I earn points on my Pay By Card payment?**
+    You only earn points if you had rewards on for that payment. No opt‑in = service fee only, no Reward Points.
+11. **Can I earn points on bank transfers?**
+    Pay By Card is card‑only (Visa, Mastercard, Amex debit or credit—no bank transfers), so this doesn't apply to Pay By Card. If we add other products that support bank transfer in future, we'll update the program rules.
+12. **Are there bonus or promotional points?**
     We may run promos with bonus points—subject to the promo terms. Same expiry and forfeiture rules apply unless we say otherwise.
 
-25. **What if I have a dispute on the original payment?**  
-    If the payment is refunded or charged back, we'll reverse the points. For disputes about the payment itself, use the normal dispute process—points will be adjusted with the outcome.
+## 3. Pending balances, reversals & refunds
+
+13. **When do my points show up?**
+    When the transaction **settles**, not when you authorise. They may show as pending briefly. For Qantas, once redemption succeeds, Qantas Points appear in your QBR account straight away.
+14. **Why is my balance "pending"?**
+    Points may be pending until the transaction settles and we've finished verification. Then they're available. For Qantas, points land in your QBR account straight away after a successful conversion.
+15. **Why were my points reversed?**
+    Refund, chargeback, or ineligible transaction—we may also adjust for errors or misuse. We don't compensate for reversed or forfeited points.
+16. **What if I have a refund on a payment I earned points on?**
+    We may reverse or reduce the points. The reward fee isn't refunded for the points portion unless our terms say otherwise.
+
+## 4. Qantas Business Rewards (QBR) & membership
+
+17. **What is Qantas Business Rewards?**
+    Qantas Business Rewards is a loyalty program that connects Australian small to medium business with a range of services and products, allowing the business to earn Qantas Points on business expenses and unlock extra benefits when flying with Qantas. Qantas Points earned by your business are stored in your Qantas Business Rewards membership account. Please visit Qantas Business Rewards for a full range of benefits.
+18. **Do I need a Qantas account to earn Reward Points?**
+    No. You only need Qantas Business Rewards (QBR) to **redeem** for Qantas Points.
+19. **How do I join Qantas Business Rewards?**
+    Join through the Prospa redemption flow when we offer it (e.g. free with Prospa). Your ABN is your QBR membership number. Qantas' terms apply once you're a member.
+20. **How do I activate my Qantas Business Rewards account?**
+    You will receive an activation email from Qantas Business Rewards. Please use the unique link in that email to set up your account. If this still doesn't work, please contact the Qantas Business Rewards Service Centre on 13 74 78 Monday to Friday or contact them online.
+21. **Are there blackout dates or limits on Qantas?**
+    Qantas' terms apply (availability, blackout dates). Once points are transferred, we're not responsible for Qantas' rules or availability.
+
+## 5. Redeeming & using points
+
+22. **What's the conversion rate with Qantas?**
+    **2 Reward Points = 1 Qantas Point.** So 2,000 Reward Points = 1,000 Qantas Points. Redeem in whole increments of 2.
+23. **What is the minimum to redeem with Qantas?**
+    You need at least **2,000 Reward Points** to redeem. You redeem in **increments of 2 Reward Points** (2 Reward Points = 1 Qantas Point).
+24. **How do I redeem for Qantas Points?**
+    You need a Qantas Business Rewards (QBR) membership—join free through our app or portal if you're not a member. Choose how many points to convert; 2 Reward Points = 1 Qantas Point. After a successful redemption, Qantas Points land in your QBR account straight away.
+25. **I redeemed but don't see Qantas Points.**
+    If redemption completed in our system, points are sent to Qantas straight away and should show in your QBR account. Check your QBR balance; for QBR or Qantas issues, contact Qantas on 13 74 78.
+
+## 6. Support
+
+26. **Who do I contact for points or redemption issues?**
+    Missing or incorrect points, or redemption not completing: contact Prospa support. For Qantas Points already in your QBR account: contact Qantas.
