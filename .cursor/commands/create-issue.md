@@ -1,53 +1,58 @@
-# Learning Opportunity
+# Create Issue
 
-Pause development mode. The user is a non-technical PM who wants to understand what we're working on in plain English.
+User is mid-development and thought of a bug/feature/improvement. Capture it fast so they can keep working.
 
-## Teaching Approach
+## Your Goal
 
-**Target audience**: Non-technical PM with very low-level engineering knowledge. Doesn't understand architecture, can't read code, and doesn't ship production apps. Basically a tech beginner.
+Create a complete Jira ticket in the **SME Apps** project using the Jira MCP connection.
 
-**Philosophy**: 80/20 rule - focus on concepts that compound. Don't oversimplify, but prioritize practical understanding over academic completeness.
+The ticket should include:
+- Clear title
+- TL;DR of what this is about
+- Current state vs expected outcome
+- Relevant files that need touching
+- Risk/notes if applicable
+- Proper type/priority/effort labels
 
-## Three-Level Explanation
+## How to Get There
 
-Present the concept at **three increasing complexity levels**. Let the user absorb each level before moving on.
+**Always ask these questions** before creating the ticket — in one single message:
+- What's the issue/feature?
+- Current behavior vs desired behavior?
+- Type (bug/feature/improvement) and priority if not obvious
+- **Which epic should this ticket sit under?** (always ask)
+- **Should this be added to the current active sprint?** (always ask)
 
-### Level 1: Core Concept
-- What this is and why it exists
-- The problem it solves
-- When you'd reach for this pattern
-- How it fits into the broader architecture
+Keep questions brief. One message with all questions beats multiple back-and-forths.
 
-### Level 2: How It Works
-- The mechanics underneath
-- Key tradeoffs and why we chose this approach
-- Edge cases and failure modes to watch for
-- How to debug when things go wrong
+**Search for context** only when helpful:
+- Grep codebase to find relevant files
+- Note any risks or dependencies you spot
+- Web search for best practices if it's a complex feature
 
-### Level 3: Deep Dive
-- Implementation details that affect production behavior
-- Performance implications and scaling considerations
-- Related patterns and when to use alternatives
-- The "senior engineer" perspective on this
+**Skip what's obvious** - If type/priority is clear from description, don't ask. But always ask about epic and sprint.
 
-## Tone
+## Creating the Ticket via MCP
 
-- Plain English, not technical jargon
-- Concrete examples from the current codebase
-- Define any technical term the first time you use it
-- Acknowledge complexity honestly - "this is genuinely tricky because..."
+Once you have all the information, use the Jira MCP connection to create the ticket with:
+- **Project**: SME Apps
+- **Title**: as discussed
+- **Description**: structured with TL;DR, current vs expected behaviour, relevant files, risks
+- **Type**: Bug / Feature / Improvement
+- **Priority**: as discussed (default: Normal)
+- **Effort**: as discussed (default: Medium)
+- **Epic**: as provided by user
+- **Sprint**: add to current active sprint only if user confirms yes
 
-## After Completing the Explanation
-
-Once you have finished all three levels, ask the user:
-
-"Would you like me to save this as a Confluence page (Confluence is your team's shared documentation tool) so you can share it with stakeholders?"
-
-- If **no**: end the conversation normally.
-- If **yes**: ask the user "Where in Confluence would you like me to create this? Please give me the space name and the parent page you'd like it saved under." Then use the Confluence MCP connection to create the page, formatting the output cleanly with the three levels presented as clearly structured sections.
-
-## After Creating the Confluence Page
-
-Once the page has been successfully created, reply with:
-- The Confluence page identifier and a direct link to the page
+After creating the ticket, reply with:
+- The ticket number and link
 - One line summary of what was created
+
+## Behavior Rules
+
+- Be conversational — ask what makes sense, not a checklist
+- Default priority: Normal, effort: Medium
+- Max 3 files in context — most relevant only
+- Bullet points over paragraphs
+- Total exchange under 2 minutes
+- Always ask about epic and sprint — never skip these two
