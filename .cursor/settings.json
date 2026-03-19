@@ -1,0 +1,16 @@
+{
+  "plugins": {
+    "figma": {
+      "enabled": true
+    },
+    "slack": {
+      "enabled": true
+    },
+    "posthog": {
+      "enabled": true
+    },
+    "atlassian": {
+      "enabled": true
+    }
+  }
+}
