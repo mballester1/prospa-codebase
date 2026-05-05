@@ -1,0 +1,55 @@
+# mergeable configuration
+# review documentation:
+# - config basics: https://mergeable.readthedocs.io/en/latest/configuration.html#basics
+# - examples     : https://mergeable.readthedocs.io/en/latest/recipes.html
+
+# note, all 'fail' actions are commented, could not get desired behavior on PRs
+# - no fail actions: all checks executed and status updated in GitHub PR
+# - at least one fail action: looks like only first check is executed, fails and posts message to the PR
+
+version: 2
+mergeable:
+  - when: pull_request.*, pull_request_review.*
+    name: 'PR desc: non-empty'
+    validate:
+      - do: description
+        no_empty:
+          enabled: true
+          message: &pull_request_description_empty__message |
+            Description matter and should not be empty.
+            Provide detail with **what** was changed, **why** it was changed, and **how** it was changed. 
+
+  - when: pull_request.*, pull_request_review.*
+    name: 'PR desc: link to JIRA ticket'
+    validate:
+      - do: description
+        or:
+          - must_include:
+              regex: 'https:\/\/prospa\.atlassian\.net\/browse\/\S+-\d+'
+              message: &pull_request_description_no_jira_link__message |
+                Traceability of work matters, each PR description should have a corresponding JIRA ticket link.
+                
+                This helps in a number of situations: other people reviewing have a context of work, traceability and history of changes for later, especially under production incidents.
+                
+                Add a link to a JIRA ticket into PR description. For example:
+                * https://prospa.atlassian.net/browse/ID-1
+          - must_include:
+              regex: 'Snyk'
+              message: 'Snyk tickets are excluded from Jira link requirements'
+
+  - when: pull_request.*, pull_request_review.*
+    name: 'PR title format: [JIRA-number] short feature description'
+    validate:
+      - do: title
+        must_include:
+          regex: '^\[(\S+-\d+|Snyk)\]'
+          message: &pull_request_title_jira_number__message |
+            Traceability of work matters, each PR title should start with a corresponding JIRA ticket number fenced with square brackets
+
+            This helps in a number of situations: merge in the branch has a JIRA ticket number which propogates into CI/CD builds - traceability and history of changes for later, especially under production incidents.
+
+            Add JIRA ticket number into PR title fenced with square brackets. For example:
+            * [[ID-1] example ticket](https://github.com/prospa-group/CreditDecisionEngine/pull/1)
+            
+            Snyk auto generated titles are also allowed. For example:
+            * [Snyk] Snyk title

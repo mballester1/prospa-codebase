@@ -1,0 +1,3 @@
+cd apps/mobile-app
+source ~/.nvm/nvm.sh && nvm use
+npx lint-staged

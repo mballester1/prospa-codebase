@@ -1,0 +1,32 @@
+name: Merge Copilot PR
+on:
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: "Pull Request number"
+        required: true
+        type: string
+      merge_setting:
+        description: "Merge strategy (default: squash)"
+        required: false
+        type: choice
+        default: squash
+        options:
+          - squash
+          - merge
+          - rebase
+  pull_request:
+    types: [labeled]
+
+jobs:
+  squash_merge:
+    uses: prospa-group/platform-core-pipelines/.github/workflows/copilot-squash-merge.yml@master
+    permissions:
+      contents: write
+      pull-requests: write
+      checks: read
+      statuses: read
+    with:
+      pr_number: ${{ github.event.inputs.pr_number || format('{0}', github.event.pull_request.number) }}
+      merge_setting: ${{ github.event.inputs.merge_setting || 'squash' }}
+    secrets: inherit

@@ -1,0 +1,112 @@
+# OSX
+#
+.DS_Store
+
+# Xcode
+#
+build/
+*.pbxuser
+!default.pbxuser
+*.mode1v3
+!default.mode1v3
+*.mode2v3
+!default.mode2v3
+*.perspectivev3
+!default.perspectivev3
+xcuserdata
+WorkspaceSettings.xcsettings
+*.xccheckout
+*.moved-aside
+DerivedData
+*.hmap
+*.ipa
+*.xcuserstate
+ios/.xcode.env.local
+
+# Android/IntelliJ
+#
+build/
+.idea
+.gradle
+local.properties
+*.iml
+*.hprof
+.cxx/
+
+# node.js
+#
+node_modules/
+npm-debug.log
+yarn-error.log
+/.env
+/.env.dev
+
+# BUCK
+buck-out/
+\.buckd/
+*.keystore
+!debug.keystore
+
+# fastlane
+#
+# It is recommended to not store the screenshots in the git repo. Instead, use fastlane to re-generate the
+# screenshots whenever they are needed.
+# For more information about the recommended setup visit:
+# https://docs.fastlane.tools/best-practices/source-control/
+
+**/fastlane/report.xml
+**/fastlane/Preview.html
+**/fastlane/screenshots
+**/fastlane/test_output
+
+# Bundle artifact
+*.jsbundle
+
+# Ruby / CocoaPods
+/ios/Pods/
+/vendor/bundle/
+
+.bundle/
+vendor/
+
+ios/artifacts/
+
+# Tests
+e2e/.artifacts/
+e2e/recorded/
+coverage/
+storybook-static/
+junit.xml
+
+# Code obfuscation
+.jso/
+index.android.bundle.map
+
+# react-native-config codegen
+ios/tmp.xcconfig
+
+.vscode
+.eslintcache
+
+# logs
+*.log
+
+# Sentry
+android/sentry.properties
+ios/sentry.properties
+
+# Livepayments
+android/app/lp.properties
+android/app/src/main/assets/AdditionalInfo.json
+android/app/src/main/assets/CAPublicKeys.json
+android/app/src/main/assets/CertificateRevocationList.json
+android/app/src/main/assets/DefaultTerminalData.json
+android/app/src/main/assets/ExceptionFile.json
+android/app/src/main/assets/manifest.json
+android/app/src/main/assets/ProfileData.json
+android/app/src/main/assets/ProfileReader.json
+android/app/src/main/assets/ProfileReaderActivate.json
+android/app/src/main/assets/ProfileReaderInitialise.json
+android/app/src/main/assets/ReferenceTags.json
+android/app/src/main/assets/tlvTerminal.json
+android/app/src/main/assets/v3DataDictionary.json

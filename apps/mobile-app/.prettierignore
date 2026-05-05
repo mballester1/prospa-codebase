@@ -1,0 +1,14 @@
+**/ios
+**/android
+**/vendor
+**/assets
+**/src/generated
+**/.vscode
+**/.idea
+**/.storybook
+**/.jso
+**/local_modules
+**/coverage
+**/e2e/.artifacts
+package-lock.json
+**/maestro
