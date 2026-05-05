@@ -1,0 +1,170 @@
+---
+description: Maestro E2E impact detection and update workflow for mobile UI changes
+alwaysApply: true
+---
+
+# Maestro AI Updates
+
+Always consider Maestro impact when working on this repo. Use `docs/maestro-policy.md` as the authority on when updates are required.
+
+## File Structure
+
+```
+apps/mobile-app/e2e-tests/.maestro/
+  verify-*.yaml              # Top-level flows — run directly in Device Cloud (tagged: smoke)
+  subflows/                  # Reusable journey steps composed by verify-*.yaml files
+    screens/                 # Single-screen assertion subflows (payments, cards, …)
+    loc/                     # Line of Credit journey subflows
+    sbl/                     # Small Business Loan journey subflows
+    businessAccount/         # Business Account journey subflows
+    bills/                   # Bills journey subflows
+  pages/                     # Page objects — selectors only, no flow logic
+    HomeScreenPage.js        → output.homescreen
+    LoginPage.js             → output.login
+    PaymentsScreenPage.js    → output.paymentsScreen
+    PayScreenPage.js         → output.pay
+    NativePayPage.js         → output.nativepay
+    BusinessAccountPage.js   → output.businessaccount
+    LocWebviewPage.js        → output.loc
+    SblWebviewPage.js        → output.sbl
+    CardsScreenPage.js       → output.cardscreen
+    BillsPage.js             → output.bills
+    StatementsScreenPage.js  → output.statements
+    SettingsScreenPage.js    → output.settingsscreen
+    AwaitingScreenPage.js    → output.awaitingscreen
+    CollectionsScreenPage.js → output.collectionsscreen
+    NativePayPage.js         → output.nativepay
+    NanositeWebviewPage.js   → output.nanosite
+    ReviewAgreementWebviewPage.js → output.reviewAgreement
+    ProductPageWebviewPage.js → output.productPage
+    PendingSecondSignScreenPage.js → output.pendingSecondSign
+  helpers/
+    load-all-elements.yaml   # Loads all page objects — always run in onFlowStart
+```
+
+## Impact Detection — Check Maestro When a Diff Contains
+
+| Signal in diff | What to check |
+|---|---|
+| `testID="..."` added, removed, or renamed | Find the matching key in `pages/*.js` and update the value |
+| Screen component name changed | Find the matching `verify-*.yaml` or `subflows/` file |
+| Button / heading / label text changed | Search `pages/*.js` for the old text string |
+| Navigation route or stack order changed | Check the journey subflow under `subflows/` |
+| New screen added | Check if a new page object and verify flow are needed |
+| `testID` removed without replacement | The flow must switch to text or coords — flag this |
+
+If none of these signals appear, state that no Maestro update is needed and why.
+
+## Step-by-Step Workflow
+
+1. **Inspect the diff** — identify which screens, components, or `testID`s changed.
+2. **Find the page object** — open the matching file in `pages/` using the table above.
+3. **Update the page object first** — change the selector value. Never update a flow before the page object.
+4. **Update the smallest flow step** — change the `assertVisible`, `tapOn`, or `runFlow` that uses the selector.
+5. **Check `smoke` tag** — if the changed flow is tagged `smoke`, it runs on every PR. Flag this clearly.
+6. **Tell the developer which flow to run** — give the exact `maestro test` command.
+
+## Selector Rules (strict priority)
+
+1. `id:` backed by a stable `testID` — always prefer this
+2. `text:` or bare string — only when the copy is stable and not dynamic
+3. `point: "NN%,MM%"` — last resort, only for webview elements with no accessible hook
+
+When adding a selector, always add it to the page object first. Never put a bare `id: "..."` string directly in a flow file.
+
+## Anti-Patterns to Fix on Sight
+
+```yaml
+# BAD — inline string ID bypasses page object
+- tapOn:
+    id: "line-of-credit-0"
+
+# GOOD — uses page object reference
+- tapOn:
+    id: ${output.paymentsScreen.locTileId}
+```
+
+```js
+// BAD — coordinate selector placed in wrong comment block
+output.loc = {
+    //  Selector type: coordinates
+    webviewCloseBtn: '93%,8%',
+    balance: 'Balance',          // ← text, not a coordinate
+};
+
+// GOOD — separate comment blocks per selector type
+output.loc = {
+    //  Selector type: text
+    balance: 'Balance',
+
+    //  Selector type: coordinates (webview — no testID available)
+    webviewCloseBtn: '93%,8%',
+};
+```
+
+```js
+// BAD — empty string selector matches anything
+currentOutstandingLabel: '',
+
+// BAD — duplicate key (JS silently overwrites first with second)
+nextBtn: 'Next',
+// ... other keys ...
+nextBtn: 'Next',
+```
+
+```js
+// BAD — regex / dynamic text placed in id section
+output.homescreen = {
+    //  Selector type: id
+    arrearsBannerTxt: 'Looks like you missed one or more repayments.*',  // ← text
+};
+
+// GOOD — each key in its correct section
+output.homescreen = {
+    //  Selector type: text
+    arrearsBannerTxt: 'Looks like you missed one or more repayments.*',
+
+    //  Selector type: id
+    arrearsBanner: 'arrears-banner',
+};
+```
+
+## Page Object Conventions
+
+- Export name matches the `output.<name>` namespace: `output.homescreen = { ... }`.
+- Group keys under `// Selector type: text`, `// Selector type: id`, `// Selector type: coordinates` — in that order.
+- Coordinate entries must include a comment explaining why no testID is available.
+- Never use UUID strings as selectors — they are data-bound and will break when data changes.
+- When a new `pages/*.js` file is added, register it in `helpers/load-all-elements.yaml`.
+
+## Flow Conventions
+
+- `verify-*.yaml` files are top-level, Device Cloud-runnable suites. Add `tags: [smoke]` for PR coverage.
+- `subflows/` files are reusable steps, not standalone tests.
+- Use `runFlow: when: visible:` guards for conditional steps so the flow degrades gracefully rather than failing.
+- Use `extendedWaitUntil` (not bare `waitForAnimationToEnd`) when waiting for async navigation.
+- Preserve existing `when: platform: iOS` / `when: platform: Android` guards.
+
+## Prompts to Use
+
+### Assess impact
+```
+Check whether my current branch changes affect Maestro tests in apps/mobile-app/e2e-tests/.maestro/.
+Inspect the diff, identify which page objects or flows are affected, and tell me whether a Maestro
+update is required based on docs/maestro-policy.md. If no update is needed, explain why in terms of
+unchanged selectors, unchanged tested journeys, or lack of UI impact.
+```
+
+### Update the right files
+```
+My UI change affects [screen name]. Find the matching page object in apps/mobile-app/e2e-tests/.maestro/pages/
+and the relevant flow or subflow. Update the page object selector first, then update the smallest
+affected flow step. Prefer stable testID selectors over text or coordinates. Keep the change minimal
+and do not rewrite unrelated parts of the suite.
+```
+
+### Get verification command
+```
+Which Maestro flow should I run locally to verify this change, and what should I include in the PR
+description about Maestro impact?
+```

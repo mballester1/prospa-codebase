@@ -1,0 +1,46 @@
+---
+description: Editing checklist for Maestro flow and page object files
+globs: apps/mobile-app/e2e-tests/.maestro/**/*
+alwaysApply: false
+---
+
+# Maestro Flow Editing
+
+Applied when editing files under `apps/mobile-app/e2e-tests/.maestro/`. For impact detection and the full workflow, see `maestro-ai-updates.mdc`.
+
+## Checklist
+
+1. **Update the page object first** — change the selector value in `pages/*.js` before touching any flow.
+2. **Update the smallest step** — change only the `assertVisible`, `tapOn`, or `runFlow` that uses the selector.
+3. **Register new page objects** — if a new `pages/*.js` file is introduced, add it to `helpers/load-all-elements.yaml`.
+4. **Guard conditional steps** — wrap optional taps in `runFlow: when: visible:` rather than letting them fail.
+5. **Check smoke coverage** — if the flow is tagged `smoke`, note this in the PR and confirm it still passes.
+6. **Give a verification command** — always tell the developer the exact `maestro test <file>` command to run locally.
+
+## Selector priority (strict)
+
+1. `id:` backed by a stable `testID`
+2. `text:` only when copy is stable and not dynamic or localised
+3. `point: "NN%,MM%"` only for webview elements with no accessible hook — document why in a comment
+
+## Page object structure
+
+```js
+output.<pageName> = {
+    //  Selector type: text
+    headingTxt: 'Some heading',
+
+    //  Selector type: id
+    primaryBtn: 'primary-button-testid',
+
+    //  Selector type: coordinates (reason: webview, no testID available)
+    closeBtn: '93%,8%',
+};
+```
+
+## Flow composition
+
+- `verify-*.yaml` → top-level Device Cloud flow, must be self-contained with `clearState` + `launchApp`.
+- `subflows/**/*.yaml` → reusable step, composed by `verify-*.yaml` via `runFlow: file:`.
+- `subflows/screens/*.yaml` → single-screen assertions, no login or navigation preamble.
+- Never call a `verify-*.yaml` from inside another flow.
