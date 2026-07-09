@@ -6,17 +6,15 @@ This guide sets up the **Braze MCP server** so Cursor can query your Braze data 
 
 ## Quick setup (do this)
 
-1. **Install `uv`** (one-time). In your **own terminal** (outside Cursor), run:
-   ```bash
-   ./scripts/install-braze-mcp-deps.sh
-   ```
-   If that fails (e.g. SSL errors on a corporate network), install uv manually: **brew install uv** or see [Install uv](https://docs.astral.sh/uv/getting-started/installation/). Then restart your terminal.
+The Braze MCP server has already been wired into your **global** Cursor config at `~/.cursor/mcp.json` (kept out of this repo so your API key is never committed — the project `.cursor/mcp.json` is tracked in git). `uv`/`uvx` is already installed and the `braze-mcp-server` package has been verified to launch. You just need to add your credentials:
 
-2. **Add your Braze credentials** in **`.cursor/mcp.json`**:
+1. **Add your Braze credentials** in **`~/.cursor/mcp.json`** (the `braze` block):
    - Replace `your-braze-api-key` with your real API key (Braze → Settings → APIs and Identifiers → API Keys; create a new read-only key).
-   - If you’re on EU, change `BRAZE_BASE_URL` to `https://rest.fra-01.braze.eu`.
+   - Confirm `BRAZE_BASE_URL` matches your cluster. It currently defaults to **US-01** (`https://rest.iad-01.braze.com`); if you’re on EU, change it to `https://rest.fra-01.braze.eu`.
 
-3. **Restart Cursor.** Then open **Cmd+Shift+J** → MCP and confirm the Braze server is listed. Try: *“List my Braze campaigns”* in Composer.
+2. **Restart Cursor.** Then open **Cmd+Shift+J** → MCP and confirm the `braze` server is listed and enabled. Try: *“List my Braze campaigns”* in Composer.
+
+> If `uv` ever goes missing (e.g. new machine): `brew install uv` or see [Install uv](https://docs.astral.sh/uv/getting-started/installation/), then restart your terminal.
 
 ---
 
